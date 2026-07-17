@@ -24,9 +24,7 @@ export default function LoginPage() {
   };
 
   const handleGoogle = () => {
-    googleLogin();
-    showToast("Google login successful.");
-    router.push("/");
+    window.location.href = "/api/auth/google?redirect=/";
   };
 
   return (

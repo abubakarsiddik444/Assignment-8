@@ -80,8 +80,16 @@ export function AuthProvider({ children }) {
           JSON.stringify([...accounts, { name, email, image: normalizeImage(image), password }])
         );
       },
-      googleLogin() {
-        saveUser({ ...fallbackUser, name: "Google Buyer", email: "google.user@qurbanihat.com" });
+      googleLogin(userData = null) {
+        if (userData) {
+          saveUser({
+            name: userData.name || "Google User",
+            email: userData.email || "google.user@assignment-8.com",
+            image: normalizeImage(userData.image),
+          });
+          return;
+        }
+        saveUser({ ...fallbackUser, name: "Google Buyer", email: "google.user@assignment-8.com" });
       },
       logout() {
         setUser(null);
