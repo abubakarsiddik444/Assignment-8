@@ -1,0 +1,80 @@
+[
+  {
+    "id": 1,
+    "name": "Deshi Shahi Cow",
+    "type": "Cow",
+    "breed": "Local Deshi",
+    "price": 120000,
+    "weight": 280,
+    "age": 3,
+    "location": "Bogura",
+    "description": "Healthy deshi cow suitable for Qurbani. Well fed with natural food and cared for by a family farm.",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0GrYwGV12dOxYMosM72LohvJE-XuJrTYuNgdhO2E_1g&s=10",
+    "category": "Large Animal"
+  },
+  {
+    "id": 2,
+    "name": "Royal Pabna Bull",
+    "type": "Cow",
+    "breed": "Pabna",
+    "price": 185000,
+    "weight": 360,
+    "age": 4,
+    "location": "Pabna",
+    "description": "Strong, calm bull with balanced body shape, ideal for a premium family Qurbani booking.",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAhjAwfeZfyPTQPCvewu2ml_N-6FYo7GG3W-fySug4Qg&s=10",
+    "category": "Large Animal"
+  },
+  {
+    "id": 3,
+    "name": "Jamuna White Goat",
+    "type": "Goat",
+    "breed": "Jamunapari",
+    "price": 32000,
+    "weight": 42,
+    "age": 2,
+    "location": "Sirajganj",
+    "description": "Tall Jamunapari goat with clean coat, active movement, and farm-supervised feeding routine.",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCIyIX_39NssyCnSdk6F6DZfpnBcTnTWFK3Q84nYMlvw&s=10",
+    "category": "Small Animal"
+  },
+  {
+    "id": 4,
+    "name": "Black Bengal Star",
+    "type": "Goat",
+    "breed": "Black Bengal",
+    "price": 24500,
+    "weight": 34,
+    "age": 2,
+    "location": "Kushtia",
+    "description": "Compact Black Bengal goat, healthy and lively, suitable for smaller family budgets.",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMGpIp-PFcSzjbgX_cjHvfl3FSphDPT4yxfiSL3TPk5g&s=10",
+    "category": "Small Animal"
+  },
+  {
+    "id": 5,
+    "name": "Meghna Red Cow",
+    "type": "Cow",
+    "breed": "Red Chittagong",
+    "price": 145000,
+    "weight": 310,
+    "age": 3,
+    "location": "Chattogram",
+    "description": "Red Chittagong cow raised on green fodder, carefully inspected before marketplace listing.",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5gNQGGwetVZZ5rVKA4EkDHZ1inh-oUIplxad3_odUuQ&s=10",
+    "category": "Large Animal"
+  },
+  {
+    "id": 6,
+    "name": "Padma Premium Goat",
+    "type": "Goat",
+    "breed": "Beetal",
+    "price": 41000,
+    "weight": 48,
+    "age": 2,
+    "location": "Rajshahi",
+    "description": "Well-built Beetal goat with bright eyes, good appetite, and documented farm care.",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJ9q6LFxf-ZXvrvIxc-CiBgm0ZjouylI_2tbsvcBQCDw&s",
+    "category": "Small Animal"
+  }
+]
