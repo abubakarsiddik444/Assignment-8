@@ -9,8 +9,21 @@ const ACCOUNTS_KEY = "qurbanihat-accounts";
 const fallbackUser = {
   name: "Qurbani Guest",
   email: "guest@qurbanihat.com",
-  image: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=crop&w=200&q=80",
+  image: "/images/avatar-placeholder.png",
 };
+
+function normalizeImage(value) {
+  if (!value) {
+    return fallbackUser.image;
+  }
+
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.toString() : fallbackUser.image;
+  } catch {
+    return fallbackUser.image;
+  }
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -51,7 +64,7 @@ export function AuthProvider({ children }) {
           saveUser({
             name: registeredUser.name,
             email: registeredUser.email,
-            image: registeredUser.image || fallbackUser.image,
+            image: normalizeImage(registeredUser.image),
           });
           return;
         }
@@ -64,7 +77,7 @@ export function AuthProvider({ children }) {
         }
         localStorage.setItem(
           ACCOUNTS_KEY,
-          JSON.stringify([...accounts, { name, email, image, password }])
+          JSON.stringify([...accounts, { name, email, image: normalizeImage(image), password }])
         );
       },
       googleLogin() {
@@ -75,7 +88,7 @@ export function AuthProvider({ children }) {
         localStorage.removeItem(STORAGE_KEY);
       },
       updateUser({ image, name }) {
-        const nextUser = { ...user, image, name };
+        const nextUser = { ...user, image: normalizeImage(image), name };
         saveUser(nextUser);
         return nextUser;
       },

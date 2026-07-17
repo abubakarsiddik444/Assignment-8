@@ -1,13 +1,22 @@
-import animals from "@/data/animals.json";
+import animalsData from "@/data/animals.json";
 
-export function getAnimals() {
-  return animals;
+function normalizeAnimal(animal) {
+  return {
+    ...animal,
+    id: animal.id ?? animal._id,
+  };
 }
 
-export function getFeaturedAnimals() {
+export async function getAnimals() {
+  return animalsData.map(normalizeAnimal);
+}
+
+export async function getFeaturedAnimals() {
+  const animals = await getAnimals();
   return animals.slice(0, 4);
 }
 
-export function getAnimalById(id) {
+export async function getAnimalById(id) {
+  const animals = await getAnimals();
   return animals.find((animal) => String(animal.id) === String(id));
 }

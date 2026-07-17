@@ -40,7 +40,7 @@ export default function UpdateProfilePage() {
               type="url"
               value={form.image}
               onChange={(event) => setForm({ ...form, image: event.target.value })}
-              required
+              placeholder="https://example.com/photo.jpg"
             />
           </label>
           <label className="field">

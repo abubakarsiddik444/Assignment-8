@@ -10,7 +10,7 @@ export default function MyProfilePage() {
   return (
     <PrivateRoute>
       <section className="profile-section">
-        <img className="profile-photo" src={user?.image} alt={user?.name} />
+        <img className="profile-photo" src={user?.image || "/images/avatar-placeholder.png"} alt={user?.name} />
         <div>
           <span className="eyebrow">My Profile</span>
           <h1>{user?.name}</h1>

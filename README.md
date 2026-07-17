@@ -1,36 +1,47 @@
 # QurbaniHat
 
-QurbaniHat is a modern livestock booking platform for Qurbani animals. Visitors can browse cows and goats, sort listings by price, inspect full animal details, and place a demo booking after login.
+QurbaniHat is a modern Next.js web app for browsing and booking Qurbani animals such as cows and goats. The project provides a polished marketplace experience with featured listings, animal details, login and registration pages, profile management, and a clean responsive user interface.
 
-## Live URL
+## Features
 
-Live URL: Add your Vercel or Render deployment link here after hosting.
+- Responsive landing page with a hero section and featured animals
+- Animal listing page with price-based sorting
+- Detailed animal view for each listing
+- Authentication flow for login, registration, and social-login-style actions
+- Protected profile and update-profile pages
+- Toast notifications for user feedback
+- Local JSON-based animal data source
+- Modern UI styling with custom CSS and Animate.css animations
 
-## Key Features
+## Tech Stack
 
-- Responsive navbar with logo, Home, All Animals, profile access, login/register, avatar, and logout states.
-- Home page with farm-style hero, featured animals, Qurbani tips, and top breeds.
-- JSON animal data source with 6 livestock listings.
-- All Animals page with loading state and price sorting.
-- Private animal details route with full details and booking form.
-- Login, registration, and Google-style social login demo flow.
-- My Profile page and Update Information route using an `updateUser({ image, name })` style client method.
-- Toast notifications for auth, booking, and profile updates.
-- Custom not-found page for unmatched routes.
-- Animate.css powered entrance animation on animal cards and hero content.
+- Next.js 16
+- React 19
+- JavaScript
+- CSS Modules / custom global styles
+- Animate.css
+- Better Auth and MongoDB libraries are included in the project setup
 
-## Demo Credentials
+## Project Structure
 
-```env
-NEXT_PUBLIC_DEMO_EMAIL=demo@qurbanihat.com
-NEXT_PUBLIC_DEMO_PASSWORD=qurbani123
+- [src/app](src/app) — route-based pages for home, animals, auth, profile, and updates
+- [src/components](src/components) — reusable UI components
+- [src/providers](src/providers) — auth and toast context providers
+- [src/lib](src/lib) — authentication and database helpers
+- [src/utils](src/utils) — utility functions for animal data
+- [src/data/animals.json](src/data/animals.json) — sample animal marketplace dataset
+
+## Getting Started
+
+### 1. Install dependencies
+
+```bash
+npm install
 ```
 
-Registered users can also log in with the credentials they create during the same browser session.
+### 2. Create environment variables
 
-## Environment Variables
-
-Copy `.env.example` to `.env.local` and update values as needed:
+Create a file named `.env.local` in the project root and add the following values:
 
 ```env
 NEXT_PUBLIC_APP_NAME=QurbaniHat
@@ -38,27 +49,35 @@ NEXT_PUBLIC_DEMO_EMAIL=demo@qurbanihat.com
 NEXT_PUBLIC_DEMO_PASSWORD=qurbani123
 ```
 
-## NPM Packages Used
-
-- `next`
-- `react`
-- `react-dom`
-- `animate.css`
-- `tailwindcss`
-- `@tailwindcss/postcss`
-- `eslint`
-- `eslint-config-next`
-
-## Run Locally
+### 3. Run the development server
 
 ```bash
-npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Then open http://localhost:3000 in your browser.
 
-## Routes
+## Available Scripts
 
-- Public: `/`, `/animals`, `/login`, `/register`
-- Private: `/animals/[id]`, `/my-profile`, `/update-profile`
+```bash
+npm run dev     # start the development server
+npm run build   # build the production app
+npm run start   # start the production build
+npm run lint    # run ESLint checks
+```
+
+## Demo Credentials
+
+You can test the authentication flow using:
+
+- Email: demo@qurbanihat.com
+- Password: qurbani123
+
+## Main Routes
+
+- Public routes: `/`, `/animals`, `/login`, `/register`
+- Protected routes: `/animals/[id]`, `/my-profile`, `/update-profile`
+
+## Notes
+
+The current version uses local JSON data for animals. The app structure is ready for future backend or database integration, and authentication UI is already wired into the frontend flow.

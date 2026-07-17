@@ -33,7 +33,7 @@ function Navbar() {
         <div className="nav-actions">
           {user ? (
             <>
-              <img className="avatar" src={user.image} alt={user.name} />
+              <img className="avatar" src={user.image || "/images/avatar-placeholder.png"} alt={user.name} />
               <button className="ghost-button" onClick={logout}>
                 Logout
               </button>

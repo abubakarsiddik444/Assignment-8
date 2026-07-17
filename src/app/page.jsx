@@ -2,8 +2,8 @@ import Link from "next/link";
 import AnimalCard from "@/components/animals/AnimalCard";
 import { getFeaturedAnimals } from "@/utils/animals";
 
-export default function Home() {
-  const featuredAnimals = getFeaturedAnimals();
+export default async function Home() {
+  const featuredAnimals = await getFeaturedAnimals();
 
   return (
     <>
