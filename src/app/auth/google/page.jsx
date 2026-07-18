@@ -10,7 +10,14 @@ export default function GoogleAuthPage() {
   const { googleLogin } = useAuth();
 
   useEffect(() => {
-    const email = searchParams.get("email") || "google.user@assignment-8.com";
+    const email = searchParams.get("email");
+    const authError = searchParams.get("auth_error");
+
+    if (authError || !email) {
+      router.replace("/login?auth_error=google_failed");
+      return;
+    }
+
     const name = searchParams.get("name") || "Google User";
     const image = searchParams.get("image") || "";
     const redirectTo = searchParams.get("redirect") || "/";

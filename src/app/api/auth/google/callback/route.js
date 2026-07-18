@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { resolveGoogleUser } from "@/lib/auth";
 
 function resolveAppUrl(request) {
   const configured = process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL;
@@ -49,14 +50,24 @@ export async function GET(request) {
     });
 
     const userData = await userResponse.json();
+    const googleUser = resolveGoogleUser({
+      name: userData.name,
+      email: userData.email,
+      picture: userData.picture,
+    });
+
+    if (!googleUser.email) {
+      return NextResponse.redirect(new URL("/?auth_error=google_email_required", appUrl));
+    }
+
     const redirectTarget = new URL(`${appUrl}/auth/google`);
-    redirectTarget.searchParams.set("name", userData.name || "Google User");
-    redirectTarget.searchParams.set("email", userData.email || "google.user@assignment-8.com");
-    redirectTarget.searchParams.set("image", userData.picture || "");
+    redirectTarget.searchParams.set("name", googleUser.name);
+    redirectTarget.searchParams.set("email", googleUser.email);
+    redirectTarget.searchParams.set("image", googleUser.image || "");
     redirectTarget.searchParams.set("redirect", state);
 
     return NextResponse.redirect(redirectTarget);
   } catch {
-    return NextResponse.redirect(new URL("/login", appUrl));
+    return NextResponse.redirect(new URL("/?auth_error=google_auth_failed", appUrl));
   }
 }

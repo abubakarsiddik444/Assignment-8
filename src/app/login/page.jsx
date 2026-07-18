@@ -8,7 +8,7 @@ import { useToast } from "@/providers/ToastProvider";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, googleLogin } = useAuth();
+  const { login } = useAuth();
   const { showToast } = useToast();
   const [form, setForm] = useState({ email: "", password: "" });
 

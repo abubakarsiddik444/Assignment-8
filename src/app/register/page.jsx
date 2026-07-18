@@ -32,9 +32,7 @@ export default function RegisterPage() {
   };
 
   const handleGoogle = () => {
-    googleLogin();
-    showToast("Google registration successful.");
-    router.push("/");
+    window.location.href = "/api/auth/google?redirect=/";
   };
 
   return (

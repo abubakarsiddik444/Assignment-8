@@ -1,27 +1,22 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { resolveGoogleUser } from "@/lib/auth";
 
 const AuthContext = createContext(null);
 const STORAGE_KEY = "qurbanihat-user";
 const ACCOUNTS_KEY = "qurbanihat-accounts";
 
-const fallbackUser = {
-  name: "Qurbani Guest",
-  email: "guest@qurbanihat.com",
-  image: "/images/avatar-placeholder.png",
-};
-
 function normalizeImage(value) {
   if (!value) {
-    return fallbackUser.image;
+    return "/images/avatar-placeholder.png";
   }
 
   try {
     const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:" ? url.toString() : fallbackUser.image;
+    return url.protocol === "http:" || url.protocol === "https:" ? url.toString() : "/images/avatar-placeholder.png";
   } catch {
-    return fallbackUser.image;
+    return "/images/avatar-placeholder.png";
   }
 }
 
@@ -50,16 +45,10 @@ export function AuthProvider({ children }) {
       user,
       ready,
       login(email, password) {
-        const demoEmail = process.env.NEXT_PUBLIC_DEMO_EMAIL || "demo@qurbanihat.com";
-        const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD || "qurbani123";
         const accounts = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || "[]");
         const registeredUser = accounts.find(
           (account) => account.email === email && account.password === password
         );
-        if (email === demoEmail && password === demoPassword) {
-          saveUser({ ...fallbackUser, email: demoEmail, name: "Demo Buyer" });
-          return;
-        }
         if (registeredUser) {
           saveUser({
             name: registeredUser.name,
@@ -81,15 +70,19 @@ export function AuthProvider({ children }) {
         );
       },
       googleLogin(userData = null) {
-        if (userData) {
+        if (userData && userData.email) {
+          const googleUser = resolveGoogleUser(userData);
+          if (!googleUser.email) {
+            throw new Error("Google account email is required to sign in.");
+          }
           saveUser({
-            name: userData.name || "Google User",
-            email: userData.email || "google.user@assignment-8.com",
-            image: normalizeImage(userData.image),
+            name: googleUser.name || "Google User",
+            email: googleUser.email,
+            image: normalizeImage(googleUser.image),
           });
           return;
         }
-        saveUser({ ...fallbackUser, name: "Google Buyer", email: "google.user@assignment-8.com" });
+        throw new Error("Google sign-in failed. Please try again.");
       },
       logout() {
         setUser(null);
