@@ -11,6 +11,7 @@ export default function UpdateProfilePage() {
   const { user, updateUser } = useAuth();
   const { showToast } = useToast();
   const [form, setForm] = useState({ name: "", image: "" });
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -21,11 +22,18 @@ export default function UpdateProfilePage() {
     return () => clearTimeout(timer);
   }, [user]);
 
-  const submitUpdate = (event) => {
+  const submitUpdate = async (event) => {
     event.preventDefault();
-    updateUser({ name: form.name, image: form.image });
-    showToast("Profile updated successfully.");
-    router.push("/my-profile");
+    setSubmitting(true);
+    try {
+      await updateUser({ name: form.name, image: form.image });
+      showToast("Profile updated successfully.");
+      router.push("/my-profile");
+    } catch (error) {
+      showToast(error.message, "error");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -51,7 +59,9 @@ export default function UpdateProfilePage() {
               required
             />
           </label>
-          <button className="primary-button" type="submit">Update Information</button>
+          <button className="primary-button" type="submit" disabled={submitting}>
+            {submitting ? "Updating..." : "Update Information"}
+          </button>
         </form>
       </section>
     </PrivateRoute>

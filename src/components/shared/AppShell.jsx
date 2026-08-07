@@ -7,7 +7,7 @@ import { ToastProvider } from "@/providers/ToastProvider";
 
 function NavLink({ href, children }) {
   const pathname = usePathname();
-  const active = pathname === href;
+  const active = pathname === href || pathname.startsWith(`${href}/`);
   return (
     <Link className={active ? "nav-link nav-link-active" : "nav-link"} href={href}>
       {children}

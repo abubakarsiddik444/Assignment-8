@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import { resolveGoogleUser } from "@/lib/auth";
 
 function resolveAppUrl(request) {
+  const host = request.headers.get("host");
+  if (host) {
+    return `http://${host}`;
+  }
+
   const configured = process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL;
   if (configured) {
     return configured.startsWith("http://") || configured.startsWith("https://")
@@ -9,8 +14,7 @@ function resolveAppUrl(request) {
       : `http://${configured}`;
   }
 
-  const host = request.headers.get("host");
-  return host ? `http://${host}` : "http://localhost:3000";
+  return "http://localhost:3000";
 }
 
 export async function GET(request) {

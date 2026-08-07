@@ -32,7 +32,7 @@ export default async function Home() {
       </section>
 
       <section className="section">
-        <div className="section-heading">
+        <div className="section-heading section-heading-center">
           <span className="eyebrow">Featured</span>
           <h2>Hand-picked animals</h2>
         </div>

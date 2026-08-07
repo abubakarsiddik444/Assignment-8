@@ -1,11 +1,18 @@
+import { betterAuth } from "better-auth";
+import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { getMongoClientInstance } from "@/lib/db";
+
+const client = getMongoClientInstance();
+const db = client.db(process.env.MONGODB_DB || "assignment-8");
+const hasGoogleProvider = Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
+
 export const authConfig = {
   appName: process.env.NEXT_PUBLIC_APP_NAME || "QurbaniHat",
-  demoEmail: process.env.NEXT_PUBLIC_DEMO_EMAIL || "demo@qurbanihat.com",
 };
 
 export function resolveGoogleUser(userData = {}) {
   const rawEmail = userData.email || userData.user?.email || userData.profile?.email || "";
-  const email = rawEmail;
+  const email = rawEmail.trim();
   const name =
     userData.name ||
     userData.user?.name ||
@@ -18,3 +25,26 @@ export function resolveGoogleUser(userData = {}) {
     image: userData.image || userData.picture || userData.user?.image || userData.profile?.image || "",
   };
 }
+
+export const auth = betterAuth({
+  appName: authConfig.appName,
+  secret: process.env.BETTER_AUTH_SECRET,
+  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL,
+  database: mongodbAdapter(db, {
+    client,
+    transaction: false,
+    usePlural: true,
+  }),
+  emailAndPassword: {
+    enabled: true,
+    minPasswordLength: 6,
+  },
+  socialProviders: hasGoogleProvider
+    ? {
+        google: {
+          clientId: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        },
+      }
+    : {},
+});

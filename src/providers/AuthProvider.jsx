@@ -1,11 +1,9 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { resolveGoogleUser } from "@/lib/auth";
+import { createContext, useContext, useMemo } from "react";
+import { authClient, updateUserShape } from "@/lib/auth-client";
 
 const AuthContext = createContext(null);
-const STORAGE_KEY = "qurbanihat-user";
-const ACCOUNTS_KEY = "qurbanihat-accounts";
 
 function normalizeImage(value) {
   if (!value) {
@@ -21,80 +19,69 @@ function normalizeImage(value) {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const savedUser = localStorage.getItem(STORAGE_KEY);
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
-      }
-      setReady(true);
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const saveUser = (nextUser) => {
-    setUser(nextUser);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
-  };
+  const session = authClient.useSession();
 
   const value = useMemo(
-    () => ({
-      user,
-      ready,
-      login(email, password) {
-        const accounts = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || "[]");
-        const registeredUser = accounts.find(
-          (account) => account.email === email && account.password === password
-        );
-        if (registeredUser) {
-          saveUser({
-            name: registeredUser.name,
-            email: registeredUser.email,
-            image: normalizeImage(registeredUser.image),
-          });
-          return;
-        }
-        throw new Error("Invalid email or password.");
-      },
-      register({ name, email, image, password }) {
-        const accounts = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || "[]");
-        if (accounts.some((account) => account.email === email)) {
-          throw new Error("An account with this email already exists.");
-        }
-        localStorage.setItem(
-          ACCOUNTS_KEY,
-          JSON.stringify([...accounts, { name, email, image: normalizeImage(image), password }])
-        );
-      },
-      googleLogin(userData = null) {
-        if (userData && userData.email) {
-          const googleUser = resolveGoogleUser(userData);
-          if (!googleUser.email) {
-            throw new Error("Google account email is required to sign in.");
+    () => {
+      const user = session.data?.user
+        ? {
+            ...session.data.user,
+            image: normalizeImage(session.data.user.image),
           }
-          saveUser({
-            name: googleUser.name || "Google User",
-            email: googleUser.email,
-            image: normalizeImage(googleUser.image),
+        : null;
+
+      return {
+        user,
+        ready: !session.isPending,
+        async login(email, password) {
+          const { error } = await authClient.signIn.email({ email, password });
+          if (error) {
+            throw new Error(error.message || "Invalid email or password.");
+          }
+          await session.refetch();
+        },
+        async register({ name, email, image, password }) {
+          const { error } = await authClient.signUp.email({
+            name,
+            email,
+            password,
+            image: normalizeImage(image),
           });
-          return;
-        }
-        throw new Error("Google sign-in failed. Please try again.");
-      },
-      logout() {
-        setUser(null);
-        localStorage.removeItem(STORAGE_KEY);
-      },
-      updateUser({ image, name }) {
-        const nextUser = { ...user, image: normalizeImage(image), name };
-        saveUser(nextUser);
-        return nextUser;
-      },
-    }),
-    [ready, user]
+          if (error) {
+            throw new Error(error.message || "Registration failed. Please try again.");
+          }
+          const { error: loginError } = await authClient.signIn.email({ email, password });
+          if (loginError) {
+            throw new Error(
+              loginError.message ||
+                "Registration succeeded, but automatic login failed. Please login manually."
+            );
+          }
+          await session.refetch();
+        },
+        async googleLogin(callbackURL = "/") {
+          const { error } = await authClient.signIn.social({
+            provider: "google",
+            callbackURL,
+          });
+          if (error) {
+            throw new Error(error.message || "Google sign-in failed. Please try again.");
+          }
+        },
+        async logout() {
+          await authClient.signOut();
+          await session.refetch();
+        },
+        async updateUser({ image, name }) {
+          const { error } = await authClient.updateUser(updateUserShape({ image: normalizeImage(image), name }));
+          if (error) {
+            throw new Error(error.message || "Profile update failed. Please try again.");
+          }
+          await session.refetch();
+        },
+      };
+    },
+    [session]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

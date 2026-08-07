@@ -22,8 +22,17 @@ export default function GoogleAuthPage() {
     const image = searchParams.get("image") || "";
     const redirectTo = searchParams.get("redirect") || "/";
 
-    googleLogin({ name, email, image });
-    router.replace(redirectTo);
+    const authenticate = async () => {
+      try {
+        await googleLogin({ name, email, image });
+      } catch {
+        router.replace("/login?auth_error=google_failed");
+        return;
+      }
+      router.replace(redirectTo);
+    };
+
+    authenticate();
   }, [googleLogin, router, searchParams]);
 
   return null;

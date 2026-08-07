@@ -12,9 +12,9 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@better-auth/mongo-adapter": "^1.6.23",
+    "@better-auth/mongo-adapter": "^1.6.26",
     "animate.css": "^4.1.1",
-    "better-auth": "^1.6.23",
+    "better-auth": "^1.6.26",
     "mongodb": "^7.5.0",
     "next": "16.2.10",
     "react": "19.2.4",

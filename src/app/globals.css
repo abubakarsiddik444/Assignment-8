@@ -135,6 +135,25 @@ textarea {
   cursor: pointer;
 }
 
+.google-button {
+  gap: 10px;
+}
+
+.google-icon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.primary-button:disabled,
+.google-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+  transform: none;
+}
+
 .primary-button:hover,
 .details-link:hover,
 .ghost-button:hover,
@@ -169,14 +188,26 @@ textarea {
   padding: 54px 0 42px;
 }
 
-.hero-copy h1,
-.section h1,
-.auth-card h1,
-.auth-wall h1,
-.profile-section h1 {
+.hero-copy h1 {
   margin: 10px 0 16px;
   font-size: clamp(2.2rem, 6vw, 5.4rem);
   line-height: 0.96;
+  letter-spacing: 0;
+}
+
+.section h1,
+.auth-wall h1,
+.profile-section h1 {
+  margin: 10px 0 16px;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.auth-card h1 {
+  margin: 10px 0 16px;
+  font-size: clamp(2rem, 8vw, 2.7rem);
+  line-height: 1.05;
   letter-spacing: 0;
 }
 
@@ -254,9 +285,16 @@ textarea {
 
 .section-heading,
 .section-toolbar {
+  display: flex;
   justify-content: space-between;
   gap: 18px;
   margin-bottom: 24px;
+}
+
+.section-heading.section-heading-center {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .section h2,
@@ -268,7 +306,7 @@ textarea {
 
 .animal-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
   gap: 18px;
 }
 
@@ -296,6 +334,7 @@ textarea {
 .card-row {
   justify-content: space-between;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .animal-card h3 {
@@ -539,10 +578,6 @@ textarea {
     grid-template-columns: 1fr;
   }
 
-  .animal-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .footer {
     grid-template-columns: 1fr;
   }
@@ -554,12 +589,15 @@ textarea {
   }
 
   .nav-wrap {
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px 11px;
   }
 
   .nav-links,
   .nav-actions {
     width: 100%;
+    justify-content: center;
   }
 
   .nav-link,
@@ -568,6 +606,7 @@ textarea {
   .google-button {
     min-height: 40px;
     padding: 0 12px;
+    white-space: nowrap;
   }
 
   .hero {
@@ -582,14 +621,67 @@ textarea {
     grid-template-columns: 1fr;
   }
 
+  .hero-panel img {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .section-heading,
   .section-toolbar {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .section,
+  .split-section,
+  .details-layout,
+  .form-section,
+  .auth-page,
+  .auth-wall,
+  .profile-section {
+    padding: 34px 0;
   }
 
   .profile-photo {
     width: 100%;
     height: auto;
     aspect-ratio: 1;
+  }
+
+  .form-card,
+  .split-section > div,
+  .auth-wall,
+  .profile-section {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 420px) {
+  .brand {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav-links,
+  .nav-actions {
+    gap: 8px;
+  }
+
+  .nav-link,
+  .ghost-button,
+  .primary-button,
+  .google-button,
+  .details-link {
+    width: 100%;
+  }
+
+  .hero-copy h1 {
+    font-size: 2.25rem;
+  }
+
+  .toast-stack {
+    right: 11px;
+    bottom: 11px;
+    width: calc(100vw - 22px);
   }
 }
