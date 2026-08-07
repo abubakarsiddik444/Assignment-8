@@ -3,15 +3,21 @@ import { resolveGoogleUser } from "@/lib/auth";
 
 function resolveAppUrl(request) {
   const host = request.headers.get("host");
+  const proto = request.headers.get("x-forwarded-proto") || "https";
   if (host) {
-    return `http://${host}`;
+    return `${proto}://${host}`;
   }
 
-  const configured = process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL;
+  const configured =
+    process.env.BETTER_AUTH_URL ||
+    process.env.NEXT_PUBLIC_APP_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
+
   if (configured) {
     return configured.startsWith("http://") || configured.startsWith("https://")
       ? configured
-      : `http://${configured}`;
+      : `https://${configured}`;
   }
 
   return "http://localhost:3000";

@@ -29,7 +29,11 @@ export function resolveGoogleUser(userData = {}) {
 export const auth = betterAuth({
   appName: authConfig.appName,
   secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL,
+  baseURL:
+    process.env.BETTER_AUTH_URL ||
+    process.env.NEXT_PUBLIC_APP_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined),
   database: mongodbAdapter(db, {
     client,
     transaction: false,
