@@ -10,7 +10,11 @@ function NavLink({ href, children, onClick }) {
   const pathname = usePathname();
   const active = pathname === href || pathname.startsWith(`${href}/`);
   return (
-    <Link className={active ? "nav-link nav-link-active" : "nav-link"} href={href} onClick={onClick}>
+    <Link
+      className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${active ? "bg-[#1f6b4f]/10 text-[#164b39]" : "text-[#647067] hover:bg-[#1f6b4f]/10 hover:text-[#164b39]"}`}
+      href={href}
+      onClick={onClick}
+    >
       {children}
     </Link>
   );
@@ -22,7 +26,11 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    setMenuOpen(false);
+    const timer = window.setTimeout(() => {
+      setMenuOpen(false);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, [pathname]);
 
   const closeMenu = () => setMenuOpen(false);
@@ -33,15 +41,15 @@ function Navbar() {
   };
 
   return (
-    <header className="site-header">
-      <nav className="nav-wrap">
-        <Link href="/" className="brand" onClick={closeMenu}>
-          <span className="brand-mark">QH</span>
-          <span>QurbaniHat</span>
+    <header className="sticky top-0 z-20 border-b border-[#ded6c7]/80 bg-[#f7f3ea]/90 backdrop-blur-xl">
+      <nav className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center gap-3 font-extrabold text-[#1f2520]" onClick={closeMenu}>
+          <span className="grid h-9 w-9 place-items-center rounded-lg bg-[#1f6b4f] text-sm font-bold text-white">QH</span>
+          <span className="text-lg">QurbaniHat</span>
         </Link>
 
-        <button
-          className="mobile-menu-toggle"
+        {/* <button
+          className="hidden max-sm:inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#1f6b4f] text-xl text-white"
           type="button"
           onClick={() => setMenuOpen((open) => !open)}
           aria-expanded={menuOpen}
@@ -49,88 +57,69 @@ function Navbar() {
           aria-label="Toggle navigation menu"
         >
           ⋮
-        </button>
+        </button> */}
+       
 
-        <div className="nav-links desktop-nav">
+        <div className="hidden items-center gap-2 sm:flex">
           <NavLink href="/" onClick={closeMenu}>Home</NavLink>
           <NavLink href="/animals" onClick={closeMenu}>All Animals</NavLink>
           {user && <NavLink href="/my-profile" onClick={closeMenu}>My Profile</NavLink>}
         </div>
-        <div className="nav-actions desktop-nav">
+        <div className="hidden items-center gap-2 md:flex">
           {user ? (
             <>
-              <img className="avatar" src={user.image || "/images/avatar-placeholder.png"} alt={user.name} />
-              <button className="ghost-button" onClick={handleLogout}>
+              <img className="h-10 w-10 rounded-full border-2 border-white object-cover" src={user.image || "/images/avatar-placeholder.png"} alt={user.name} />
+              <button className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[#ded6c7] bg-[#fffdf7]/80 px-4 py-2 font-semibold text-[#1f2520] transition hover:-translate-y-0.5" onClick={handleLogout}>
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link className="ghost-button" href="/login" onClick={closeMenu}>
+              <Link className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[#ded6c7] bg-[#fffdf7]/80 px-4 py-2 font-semibold text-[#1f2520] transition hover:-translate-y-0.5" href="/login" onClick={closeMenu}>
                 Login
               </Link>
-              <Link className="primary-button compact" href="/register" onClick={closeMenu}>
+              <Link className="inline-flex min-h-10 items-center justify-center rounded-lg bg-[#1f6b4f] px-4 py-2 font-semibold text-white transition hover:-translate-y-0.5" href="/register" onClick={closeMenu}>
                 Register
               </Link>
             </>
           )}
         </div>
 
-        <div id="mobile-nav-menu" className={`mobile-menu ${menuOpen ? "open" : ""}`}>
-          <div className="mobile-menu-links">
+        <div id="mobile-nav-menu" className={`w-full border-t border-[#ded6c7] pt-3 max-sm:hidden ${menuOpen ? "flex flex-col gap-3" : "hidden"}`}>
+          <div className="flex flex-col gap-1">
             <NavLink href="/" onClick={closeMenu}>Home</NavLink>
             <NavLink href="/animals" onClick={closeMenu}>All Animals</NavLink>
             {user && <NavLink href="/my-profile" onClick={closeMenu}>My Profile</NavLink>}
           </div>
-          <div className="mobile-menu-actions">
+          <div className="flex flex-col gap-2">
             {user ? (
               <>
-                <div className="mobile-profile">
-                  <img className="avatar" src={user.image || "/images/avatar-placeholder.png"} alt={user.name} />
+                <div className="flex items-center gap-3 rounded-lg bg-[#fffdf7]/80 p-2">
+                  <img className="h-10 w-10 rounded-full border-2 border-white object-cover" src={user.image || "/images/avatar-placeholder.png"} alt={user.name} />
                   <div>
-                    <strong>{user.name}</strong>
-                    <span>{user.email}</span>
+                    <p className="font-semibold text-[#1f2520]">{user.name}</p>
+                    <p className="text-sm text-[#647067]">{user.email}</p>
                   </div>
                 </div>
-                <button className="ghost-button" onClick={handleLogout}>
+                <button className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[#ded6c7] bg-[#fffdf7]/80 px-4 py-2 font-semibold text-[#1f2520] transition" onClick={handleLogout}>
                   Logout
                 </button>
               </>
             ) : (
               <>
-                <Link className="ghost-button" href="/login" onClick={closeMenu}>
+                <Link className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[#ded6c7] bg-[#fffdf7]/80 px-4 py-2 font-semibold text-[#1f2520] transition" href="/login" onClick={closeMenu}>
                   Login
                 </Link>
-                <Link className="primary-button compact" href="/register" onClick={closeMenu}>
+                <Link className="inline-flex min-h-10 items-center justify-center rounded-lg bg-[#1f6b4f] px-4 py-2 font-semibold text-white transition" href="/register" onClick={closeMenu}>
                   Register
                 </Link>
               </>
             )}
           </div>
         </div>
+
       </nav>
     </header>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="footer">
-      <div>
-        <h3>QurbaniHat</h3>
-        <p>A Bangladesh haat-bazar booking experience for verified Qurbani cows and goats.</p>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <p>Hotline: +880 1711-000000</p>
-        <p>Email: care@qurbanihat.example</p>
-      </div>
-      <div>
-        <h4>Social</h4>
-        <p>Facebook / Instagram / YouTube</p>
-        <p>Farm updates every evening.</p>
-      </div>
-    </footer>
   );
 }
 
@@ -139,8 +128,9 @@ export default function AppShell({ children }) {
     <AuthProvider>
       <ToastProvider>
         <Navbar />
-        <main className="page-body">{children}</main>
-        <Footer />
+        <main className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+          {children}
+        </main>
       </ToastProvider>
     </AuthProvider>
   );
