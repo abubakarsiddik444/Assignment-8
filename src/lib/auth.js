@@ -43,12 +43,21 @@ export const auth = betterAuth({
     enabled: true,
     minPasswordLength: 6,
   },
-  socialProviders: hasGoogleProvider
-    ? {
+  // socialProviders: hasGoogleProvider
+  //   ? {
+  //       google: {
+  //         clientId: process.env.GOOGLE_CLIENT_ID,
+  //         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  //       },
+  //     }
+  //   : {},
+
+  
+  socialProviders: {
         google: {
           clientId: process.env.GOOGLE_CLIENT_ID,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         },
       }
-    : {},
+    
 });
