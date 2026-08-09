@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useMemo, useState } from "react";
+import { Toaster } from "react-hot-toast";
 
 const ToastContext = createContext(null);
 
@@ -30,6 +31,7 @@ export function ToastProvider({ children }) {
           </div>
         ))}
       </div>
+      <Toaster position="top-right" />
     </ToastContext.Provider>
   );
 }

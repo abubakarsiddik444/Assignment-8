@@ -1,85 +1,82 @@
 @import "tailwindcss";
 
-:root {
-  color-scheme: light;
-}
+@layer base {
+  :root {
+    color-scheme: light;
+    --primary: #1f6b4f;
+    --primary-contrast: #ffffff;
+    --btn-radius: 0.5rem;
+    --btn-padding-vertical: 0.5rem;
+    --btn-padding-horizontal: 1rem;
+  }
 
-* {
-  box-sizing: border-box;
-}
+  * {
+    box-sizing: border-box;
+  }
 
-html {
-  scroll-behavior: smooth;
-}
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  min-height: 100vh;
-  margin: 0;
-  background: linear-gradient(120deg, rgba(31,107,79,0.08), transparent 34%), linear-gradient(300deg, rgba(193,141,44,0.12), transparent 30%), #f7f3ea;
-  color: #1f2520;
-  font-family: Arial, Helvetica, sans-serif;
-}
+  body {
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(120deg, rgba(31,107,79,0.08), transparent 34%), linear-gradient(300deg, rgba(193,141,44,0.12), transparent 30%), #f7f3ea;
+    color: #1f2520;
+    font-family: Arial, Helvetica, sans-serif;
+  }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
-img {
-  display: block;
-  max-width: 100%;
-}
+  img {
+    display: block;
+    max-width: 100%;
+  }
 
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
 
-/* Primary button styles: unify CTA appearance across the app */
-:root{
-  --primary: #1f6b4f;
-  --primary-contrast: #ffffff;
-  --btn-radius: 0.5rem;
-  --btn-padding-vertical: 0.5rem;
-  --btn-padding-horizontal: 1rem;
-}
+  button,
+  input[type="submit"],
+  input[type="button"],
+  .btn,
+  a.btn {
+    background-color: var(--primary);
+    color: var(--primary-contrast);
+    border-color: transparent;
+    padding: var(--btn-padding-vertical) var(--btn-padding-horizontal);
+    border-radius: var(--btn-radius);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
 
-button,
-input[type="submit"],
-input[type="button"],
-.btn,
-a.btn {
-  background-color: var(--primary) !important;
-  color: var(--primary-contrast) !important;
-  border-color: transparent !important;
-  padding: var(--btn-padding-vertical) var(--btn-padding-horizontal) !important;
-  border-radius: var(--btn-radius) !important;
-  font-weight: 600 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.5rem !important;
-}
+  button:focus-visible,
+  input[type="submit"]:focus-visible,
+  input[type="button"]:focus-visible {
+    outline: 3px solid rgba(31,107,79,0.15);
+    outline-offset: 2px;
+  }
 
-button:focus-visible,
-input[type="submit"]:focus-visible,
-input[type="button"]:focus-visible {
-  outline: 3px solid rgba(31,107,79,0.15);
-  outline-offset: 2px;
-}
+  button:hover,
+  input[type="submit"]:hover,
+  input[type="button"]:hover,
+  .btn:hover {
+    transform: translateY(-1px);
+  }
 
-button:hover,
-input[type="submit"]:hover,
-input[type="button"]:hover,
-.btn:hover {
-  transform: translateY(-1px);
-}
-
-/* Allow components to opt-out by using the utility class `btn-secondary` */
-.btn-secondary {
-  background-color: transparent !important;
-  color: inherit !important;
-  border-color: #ded6c7 !important;
+  .btn-secondary {
+    background-color: transparent !important;
+    color: inherit !important;
+    border-color: #ded6c7 !important;
+  }
 }

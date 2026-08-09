@@ -6,11 +6,10 @@ import { useState } from "react";
 import { useAuth } from "@/providers/AuthProvider";
 import { useToast } from "@/providers/ToastProvider";
 import { FcGoogle } from "react-icons/fc";
-import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, googleLogin } = useAuth();
+  const { user, login, googleLogin, logout } = useAuth();
   const { showToast } = useToast();
   const [form, setForm] = useState({ email: "", password: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -29,11 +28,25 @@ export default function LoginPage() {
     }
   };
 
-   const handleGoogle = async () => {
-      await authClient.signIn.social({
-        provider: "google"
-      })
-    };
+  const handleLogout = async () => {
+    try {
+      await logout();
+      showToast("Logged out successfully.");
+      router.push("/login");
+    } catch (error) {
+      showToast(error.message, "error");
+    }
+  };
+
+  const handleGoogle = async () => {
+    try {
+      await googleLogin();
+      showToast("Google login successful.");
+      router.push("/");
+    } catch (error) {
+      showToast(error.message, "error");
+    }
+  };
 
 
   return (
@@ -69,17 +82,22 @@ export default function LoginPage() {
           />
 
         </label>
-        <button className="mb-3 inline-flex w-full items-center justify-center rounded-lg bg-[#1f6b4f] px-4 py-3 font-semibold text-white transition hover:-translate-y-0.5" type="submit" disabled={submitting}>
+        <button className="mb-3 cursor-pointer inline-flex w-full items-center justify-center rounded-lg bg-[#1f6b4f] px-4 py-3 font-semibold text-white transition hover:-translate-y-0.5" type="submit" disabled={submitting}>
           {submitting ? "Logging in..." : "Login"}
         </button>
 
-
-        <button className="mb-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#ded6c7] bg-white px-4 py-3 font-semibold text-[#1f2520] transition hover:-translate-y-0.5" type="button" onClick={handleGoogle}>
-          <FcGoogle size={20} />Continue with Google
-        </button>
+        {user ? (
+          <button className="mb-4 inline-flex w-full items-center justify-center rounded-lg border border-[#ded6c7] bg-white px-4 py-3 font-semibold text-[#1f2520] transition hover:-translate-y-0.5" type="button" onClick={handleLogout}>
+            Logout
+          </button>
+        ) : (
+          <button className="mb-4 cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#ded6c7] bg-white px-4 py-3 font-semibold text-[#1f2520] transition hover:-translate-y-0.5" type="button" onClick={handleGoogle}>
+            <FcGoogle size={20} />Continue with Google
+          </button>
+        )}
 
         <p className="text-sm text-[#647067]">New here? <Link className="font-semibold text-[#1f6b4f]" href="/register">Register</Link></p>
-        
+
       </form>
     </section>
   );

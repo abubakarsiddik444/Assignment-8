@@ -6,7 +6,6 @@ import { useState } from "react";
 import { useAuth } from "@/providers/AuthProvider";
 import { useToast } from "@/providers/ToastProvider";
 import { FcGoogle } from "react-icons/fc";
-import { authClient } from "@/lib/auth-client";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -38,9 +37,13 @@ export default function RegisterPage() {
   };
 
   const handleGoogle = async () => {
-    await authClient.signIn.social({
-      provider: "google"
-    })
+    try {
+      await googleLogin();
+      showToast("Google login successful.");
+      router.push("/");
+    } catch (error) {
+      showToast(error.message, "error");
+    }
   };
 
   return (
@@ -60,12 +63,12 @@ export default function RegisterPage() {
         
         <label className="mb-4 flex flex-col gap-2 text-sm font-semibold text-[#1f2520]">Password<input className="rounded-lg border border-[#ded6c7] bg-white px-3 py-2 outline-none ring-0 focus:border-[#1f6b4f]" name="password" type="password" value={form.password} onChange={updateField} required /></label>
         
-        <button className="mb-3 inline-flex w-full items-center justify-center rounded-lg bg-[#1f6b4f] px-4 py-3 font-semibold text-white transition hover:-translate-y-0.5" type="submit" disabled={submitting}>
+        <button className="mb-3 cursor-pointer inline-flex w-full items-center justify-center rounded-lg bg-[#1f6b4f] px-4 py-3 font-semibold text-white transition hover:-translate-y-0.5" type="submit" disabled={submitting}>
           {submitting ? "Registering..." : "Register"}
         
         </button>
 
-        <button className="mb-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#ded6c7] bg-white px-4 py-3 font-semibold transition hover:-translate-y-0.5" type="button" onClick={handleGoogle}>
+        <button className="btn cursor-pointer mb-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#ded6c7] bg-white px-4 py-3 font-semibold text-[#1f2520] transition hover:-translate-y-0.5" type="button" onClick={handleGoogle}>
           <FcGoogle size={20} />Continue with Google
         </button>
 
